@@ -4,6 +4,11 @@ We built a network with four autonomous systems using Docker Compose and FRRouti
 
 We used this lab to check BGP sessions, change the preferred route with LOCAL_PREF, and observe what happened when we disabled and restored a BGP peer. We also captured the BGP messages in Wireshark.
 
+## Contributors
+
+- Minh Quan Tran
+- Evan Brisbin
+
 ## Software
 
 We used:
@@ -19,13 +24,14 @@ FRRouting runs inside the containers. It does not need a separate installation o
 ## Files
 
 - `compose.yaml`: routers, virtual links, addresses, and container settings
+- `captures/bgp-captures.pcap`: the packet capture used in our report
 - `configs/left.conf`: left router configuration and LOCAL_PREF policy
 - `configs/top.conf`: top router configuration
 - `configs/bottom.conf`: bottom router configuration
 - `configs/right.conf`: right router configuration
 - `configs/daemons` and `configs/vtysh.conf`: FRRouting startup settings
-- `public/`: screenshots from our experiments
-- `captures/bgp-evidence.pcap`: the packet capture used in our report
+- `images/`: screenshots from our lab
+- `docs/`: project report for our lab
 
 We submit the report, slides, and narrated demonstration separately.
 
@@ -199,7 +205,7 @@ Press `Ctrl+C` in the second terminal to stop the continuous ping and display it
 
 ## 5. Inspecting the packet capture
 
-Open `captures/bgp-evidence.pcap` in Wireshark.
+Open `captures/bgp-captures.pcap` in Wireshark.
 
 Use the display filter:
 
@@ -246,7 +252,7 @@ In another terminal, disable the bottom peer, wait about 10 seconds, and restore
 
 Press `Ctrl+C` in the capture terminal. Open `captures/bgp-repeat.pcap` in Wireshark.
 
-This saves the new capture separately and preserves the original evidence file.
+This saves the new capture separately and preserves the original captures file.
 
 ## Our recorded results
 
