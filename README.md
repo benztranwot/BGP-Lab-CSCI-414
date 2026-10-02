@@ -24,7 +24,7 @@ FRRouting runs inside the containers. It does not need a separate installation o
 - `configs/bottom.conf`: bottom router configuration
 - `configs/right.conf`: right router configuration
 - `configs/daemons` and `configs/vtysh.conf`: FRRouting startup settings
-- `evidence/`: screenshots from our experiments
+- `public/`: screenshots from our experiments
 - `captures/bgp-evidence.pcap`: the packet capture used in our report
 
 We submit the report, slides, and narrated demonstration separately.
