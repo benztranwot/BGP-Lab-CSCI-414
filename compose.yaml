@@ -1,0 +1,95 @@
+name: bgp-lab
+
+services:
+  left:
+    image: quay.io/frrouting/frr:10.7.1
+    cap_add: [NET_ADMIN, NET_RAW, SYS_ADMIN]
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "ip addr add 10.51.0.1/24 dev lo && exec /usr/lib/frr/docker-start",
+      ]
+    volumes:
+      - ./configs/daemons:/etc/frr/daemons
+      - ./configs/left.conf:/etc/frr/frr.conf
+      - ./configs/vtysh.conf:/etc/frr/vtysh.conf
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    networks:
+      left_top:
+        ipv4_address: 10.44.1.2
+      left_bottom:
+        ipv4_address: 10.44.3.2
+
+  top:
+    image: quay.io/frrouting/frr:10.7.1
+    cap_add: [NET_ADMIN, NET_RAW, SYS_ADMIN]
+    volumes:
+      - ./configs/daemons:/etc/frr/daemons
+      - ./configs/top.conf:/etc/frr/frr.conf
+      - ./configs/vtysh.conf:/etc/frr/vtysh.conf
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    networks:
+      left_top:
+        ipv4_address: 10.44.1.3
+      top_right:
+        ipv4_address: 10.44.2.2
+
+  bottom:
+    image: quay.io/frrouting/frr:10.7.1
+    cap_add: [NET_ADMIN, NET_RAW, SYS_ADMIN]
+    volumes:
+      - ./configs/daemons:/etc/frr/daemons
+      - ./configs/bottom.conf:/etc/frr/frr.conf
+      - ./configs/vtysh.conf:/etc/frr/vtysh.conf
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    networks:
+      left_bottom:
+        ipv4_address: 10.44.3.3
+      bottom_right:
+        ipv4_address: 10.44.4.2
+
+  right:
+    image: quay.io/frrouting/frr:10.7.1
+    cap_add: [NET_ADMIN, NET_RAW, SYS_ADMIN]
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "ip addr add 10.52.0.1/24 dev lo && exec /usr/lib/frr/docker-start",
+      ]
+    volumes:
+      - ./configs/daemons:/etc/frr/daemons
+      - ./configs/right.conf:/etc/frr/frr.conf
+      - ./configs/vtysh.conf:/etc/frr/vtysh.conf
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    networks:
+      top_right:
+        ipv4_address: 10.44.2.3
+      bottom_right:
+        ipv4_address: 10.44.4.3
+
+networks:
+  left_top:
+    ipam:
+      config:
+        - subnet: 10.44.1.0/29
+
+  top_right:
+    ipam:
+      config:
+        - subnet: 10.44.2.0/29
+
+  left_bottom:
+    ipam:
+      config:
+        - subnet: 10.44.3.0/29
+
+  bottom_right:
+    ipam:
+      config:
+        - subnet: 10.44.4.0/29
